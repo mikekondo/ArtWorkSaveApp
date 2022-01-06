@@ -79,6 +79,7 @@ class MusicDataViewController: UIViewController {
             print("tap再生ボタン")
             sender.setTitle("停止", for: .normal)
             let previewUrl = URL(string: passedMusicModel.previewUrl_!)
+            print("previewUrl",previewUrl as Any)
             downloadMusicURL(musicPlayUrl: previewUrl!)
         }
         else if(sender.titleLabel!.text == "停止"){

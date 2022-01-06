@@ -11,4 +11,5 @@ target 'ArtWorkSaveApp' do
   pod 'SwiftyJSON'
   pod 'Alamofire'
   pod 'Pastel'
+  pod 'MiniPlayer'
 end
