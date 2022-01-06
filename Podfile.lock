@@ -6,6 +6,7 @@ PODS:
   - SDWebImage (5.12.1):
     - SDWebImage/Core (= 5.12.1)
   - SDWebImage/Core (5.12.1)
+  - SPAlert (4.1.0)
   - SwiftyJSON (5.0.1)
 
 DEPENDENCIES:
@@ -14,6 +15,7 @@ DEPENDENCIES:
   - Pastel
   - PKHUD
   - SDWebImage
+  - SPAlert
   - SwiftyJSON
 
 SPEC REPOS:
@@ -23,6 +25,7 @@ SPEC REPOS:
     - Pastel
     - PKHUD
     - SDWebImage
+    - SPAlert
     - SwiftyJSON
 
 SPEC CHECKSUMS:
@@ -31,8 +34,9 @@ SPEC CHECKSUMS:
   Pastel: 814f081efbe2859c37e65ee44f396e6e5be88619
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
+  SPAlert: 81dcf6ce61aa5aeb966475bfbb28c838161f1326
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
 
-PODFILE CHECKSUM: e95b7a742557bc304d7c3f9c9064c44a5a54fef6
+PODFILE CHECKSUM: f4220c84d3d2420ba68c10d595894890f63b6631
 
 COCOAPODS: 1.10.2

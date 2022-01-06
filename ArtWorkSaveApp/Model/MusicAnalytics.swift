@@ -44,7 +44,7 @@ class MusicAnalytics{
                         if let artistName = json["results"][i]["artistName"].string,let collectionName = json["results"][i]["collectionName"].string,let trackName = json["results"][i]["trackName"].string,let previewUrl = json["results"][i]["previewUrl"].string,var artworkUrl = json["results"][i]["artworkUrl100"].string{
                             //アーティスト写真を大きくする処理("100x100bb"のままだと画質が落ちるため)
                             if let range = artworkUrl.range(of:"100x100bb"){
-                                artworkUrl.replaceSubrange(range, with: "1000x1000bb")
+                                artworkUrl.replaceSubrange(range, with: "2000x2000bb")
                             }
                             let musicModel = MusicModel(artistName_: artistName, collectionName_: collectionName, trackName_: trackName, previewUrl_: previewUrl, artworkUrl_: artworkUrl)
                             self.musicModelArray.append(musicModel)

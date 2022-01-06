@@ -9,29 +9,27 @@ import UIKit
 import SDWebImage
 import Photos
 import AVFoundation
-import PKHUD
 import MiniPlayer
+import SPAlert
 
-class MusicDataViewController: UIViewController,MiniPlayerDelegate {
+class MusicDataViewController: UIViewController,MiniPlayerDelegate,UINavigationControllerDelegate {
     
     var passedMusicModel = MusicModel()
     var artworkURL:URL!
     @IBOutlet weak var artWorkImageView: UIImageView!
     @IBOutlet weak var artWorkBackGroundImageView: UIImageView!
     
-    @IBOutlet weak var artistNameLabel: UILabel!
-    
-    @IBOutlet weak var collectionNameLabel: UILabel!
-    
     @IBOutlet weak var trackNameLabel: UILabel!
-    @IBOutlet weak var playAndStop: UIButton!
-    
+    @IBOutlet weak var artistNameLabel: UILabel!
     @IBOutlet weak var miniPlayer: MiniPlayer!
     
-    var player:AVAudioPlayer?
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.delegate=self
+        
+        //miniPlayerの設定
         miniPlayer.delegate = self
+        
         
         miniPlayer.tintColor = UIColor.white
         miniPlayer.backgroundColor = UIColor.init(red: 192/255.0, green: 192/255.0, blue: 192/255.0, alpha: 1)
@@ -46,12 +44,16 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate {
         
         miniPlayer.durationTimeInSec = 0
         
-        //ダウンロードする前のURL
-        let urlPath2 = passedMusicModel.previewUrl_!
+        let urlPath = passedMusicModel.previewUrl_!
         
-        let song = AVPlayerItem(asset: AVAsset(url: URL(string: urlPath2)!), automaticallyLoadedAssetKeys: ["playable"])
+        let song = AVPlayerItem(asset: AVAsset(url: URL(string: urlPath)!), automaticallyLoadedAssetKeys: ["playable"])
         self.miniPlayer.soundTrack = song
         
+        self.title = "\(passedMusicModel.collectionName_!)"
+        self.navigationController?.navigationBar.titleTextAttributes = [
+           // 文字の色
+               .foregroundColor: UIColor.white
+           ]
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -61,7 +63,6 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate {
         artWorkImageView.sd_setImage(with: URL(string: passedMusicModel.artworkUrl_!), completed: nil)
         
         artistNameLabel.text = passedMusicModel.artistName_
-        collectionNameLabel.text = passedMusicModel.collectionName_
         trackNameLabel.text = passedMusicModel.trackName_
         artworkURL = URL(string: passedMusicModel.artworkUrl_!)
     }
@@ -70,8 +71,10 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate {
         saveImage()
     }
     func saveImage(){
-        let alertController = UIAlertController(title: "保存", message: "この画像を保存しますか？", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "保存", message: "このジャケット写真を保存しますか？", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
+            
+            SPAlert.present(title: "ライブラリに追加しました", preset: .done)
             PHPhotoLibrary.shared().performChanges {
                 //PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: URL(string: self.passedMusicModel.artworkUrl_!)!)
                 PHAssetChangeRequest.creationRequestForAsset(from: self.artWorkImageView.image!)
@@ -80,8 +83,8 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate {
                     print(error.debugDescription)
                     //アラートだしたい！
                 }
-                if result{
-                    print("動画を保存しました")
+                else {
+                    print("画像を保存しました")
                     //アラートだしたい！
                     
                 }
@@ -96,7 +99,9 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate {
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
-    
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        miniPlayer.stop()
+    }
     
     func didPlay(player: MiniPlayer) {
         print("Playing...")

@@ -12,4 +12,5 @@ target 'ArtWorkSaveApp' do
   pod 'Alamofire'
   pod 'Pastel'
   pod 'MiniPlayer'
+  pod 'SPAlert'
 end
