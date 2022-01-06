@@ -10,8 +10,10 @@ import SDWebImage
 import Photos
 import AVFoundation
 import PKHUD
+import MiniPlayer
 
-class MusicDataViewController: UIViewController {
+class MusicDataViewController: UIViewController,MiniPlayerDelegate {
+    
     var passedMusicModel = MusicModel()
     var artworkURL:URL!
     @IBOutlet weak var artWorkImageView: UIImageView!
@@ -24,10 +26,31 @@ class MusicDataViewController: UIViewController {
     @IBOutlet weak var trackNameLabel: UILabel!
     @IBOutlet weak var playAndStop: UIButton!
     
+    @IBOutlet weak var miniPlayer: MiniPlayer!
+    
     var player:AVAudioPlayer?
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        miniPlayer.delegate = self
+        
+        miniPlayer.tintColor = UIColor.white
+        miniPlayer.backgroundColor = UIColor.init(red: 192/255.0, green: 192/255.0, blue: 192/255.0, alpha: 1)
+        
+        miniPlayer.timeLabelVisible = true
+        
+        miniPlayer.timerColor = UIColor.white
+        
+        miniPlayer.activeTimerColor = UIColor.white
+        
+        miniPlayer.activeTrackColor = UIColor.init(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
+        
+        miniPlayer.durationTimeInSec = 0
+        
+        //ダウンロードする前のURL
+        let urlPath2 = passedMusicModel.previewUrl_!
+        
+        let song = AVPlayerItem(asset: AVAsset(url: URL(string: urlPath2)!), automaticallyLoadedAssetKeys: ["playable"])
+        self.miniPlayer.soundTrack = song
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -74,46 +97,17 @@ class MusicDataViewController: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
     
-    @IBAction func playAndStopButton(_ sender: UIButton) {
-        if(sender.titleLabel!.text == "試聴"){
-            print("tap再生ボタン")
-            sender.setTitle("停止", for: .normal)
-            let previewUrl = URL(string: passedMusicModel.previewUrl_!)
-            print("previewUrl",previewUrl as Any)
-            downloadMusicURL(musicPlayUrl: previewUrl!)
-        }
-        else if(sender.titleLabel!.text == "停止"){
-            print("tap停止ボタン")
-            if player?.isPlaying == true{
-                player!.stop()
-            }
-            sender.setTitle("試聴", for: .normal)
-            
-        }
+    
+    func didPlay(player: MiniPlayer) {
+        print("Playing...")
     }
-    func downloadMusicURL(musicPlayUrl:URL){
-        print("downloadMusic")
-        var downloadTask:URLSessionDownloadTask
-        HUD.show(.progress)
-        print("インディケータ発動")
-        downloadTask = URLSession.shared.downloadTask(with: musicPlayUrl, completionHandler: { (musicPlayUrl, response, error) in
-            print("インディケータ閉じる")
-            HUD.hide()
-            print("downloadMusic2")
-            self.play(url:musicPlayUrl!)
-        })
-        downloadTask.resume()
+    
+    func didStop(player: MiniPlayer) {
+        print("Stopped")
     }
-    func play(url:URL){
-        print("play")
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player?.prepareToPlay()
-            player?.volume = 1.0
-            player?.play()
-        } catch let error as NSError {
-            print(error.description)
-        }
+    
+    func didPause(player: MiniPlayer) {
+        print("Pause")
     }
     
 }

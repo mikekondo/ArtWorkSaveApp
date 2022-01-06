@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -95,19 +96,16 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xTz-aa-XMM">
-                                        <rect key="frame" x="38" y="632" width="111" height="72"/>
+                                        <rect key="frame" x="38" y="607" width="111" height="72"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="試聴">
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
-                                        <connections>
-                                            <action selector="playAndStopButton:" destination="MGC-Go-RCq" eventType="touchUpInside" id="H2U-tC-rlH"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V2D-Jz-Mw8">
-                                        <rect key="frame" x="227" y="632" width="111" height="72"/>
+                                        <rect key="frame" x="227" y="607" width="111" height="72"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="保存">
@@ -118,6 +116,11 @@
                                             <action selector="saveButton:" destination="MGC-Go-RCq" eventType="touchUpInside" id="lTJ-rV-aH0"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GdA-o6-Vy9" customClass="MiniPlayer" customModule="MiniPlayer">
+                                        <rect key="frame" x="0.0" y="707" width="375" height="53"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -156,6 +159,7 @@
                         <outlet property="artWorkImageView" destination="dP5-35-0Nw" id="PcU-bX-67h"/>
                         <outlet property="artistNameLabel" destination="dyX-Yo-wId" id="h9N-Wy-pB1"/>
                         <outlet property="collectionNameLabel" destination="hmF-P9-15l" id="ZvW-ZO-d3F"/>
+                        <outlet property="miniPlayer" destination="GdA-o6-Vy9" id="zob-rN-rhU"/>
                         <outlet property="playAndStop" destination="xTz-aa-XMM" id="fdF-GI-Geg"/>
                         <outlet property="trackNameLabel" destination="cnL-cd-7xs" id="19N-PK-uoc"/>
                     </connections>
@@ -183,4 +187,9 @@
             <point key="canvasLocation" x="13.6" y="79.802955665024641"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
