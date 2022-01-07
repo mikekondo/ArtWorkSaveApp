@@ -22,7 +22,7 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate,UINavigationC
     @IBOutlet weak var trackNameLabel: UILabel!
     @IBOutlet weak var artistNameLabel: UILabel!
     @IBOutlet weak var miniPlayer: MiniPlayer!
-    
+    @IBOutlet weak var artSaveButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.delegate=self
@@ -32,7 +32,7 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate,UINavigationC
         
         
         miniPlayer.tintColor = UIColor.white
-        miniPlayer.backgroundColor = UIColor.init(red: 192/255.0, green: 192/255.0, blue: 192/255.0, alpha: 1)
+        miniPlayer.backgroundColor = UIColor.init(red: 170/255.0, green: 170/255.0, blue: 170/255.0, alpha: 0.5)
         
         miniPlayer.timeLabelVisible = true
         
@@ -40,7 +40,8 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate,UINavigationC
         
         miniPlayer.activeTimerColor = UIColor.white
         
-        miniPlayer.activeTrackColor = UIColor.init(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
+        
+        miniPlayer.activeTrackColor = UIColor.init(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.7)
         
         miniPlayer.durationTimeInSec = 0
         
@@ -54,6 +55,16 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate,UINavigationC
            // 文字の色
                .foregroundColor: UIColor.white
            ]
+        artSaveButton.setTitle("ジャケット写真の保存", for: .normal)
+        artSaveButton.setTitleColor(UIColor.white, for: .normal)
+        artSaveButton.backgroundColor = UIColor.init(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.5)
+        artSaveButton.layer.cornerRadius = 10
+        artSaveButton.alpha = 1.0
+        artSaveButton.layer.shadowColor = UIColor.black.cgColor //　影の色
+        artSaveButton.layer.shadowOpacity = 0.3  //影の濃さ
+        artSaveButton.layer.shadowRadius = 5.0 // 影のぼかし量
+        artSaveButton.layer.shadowOffset = CGSize(width: 10, height: 10)
+        artSaveButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 40)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -65,23 +76,24 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate,UINavigationC
         artistNameLabel.text = passedMusicModel.artistName_
         trackNameLabel.text = passedMusicModel.trackName_
         artworkURL = URL(string: passedMusicModel.artworkUrl_!)
+        
     }
     
-    @IBAction func saveButton(_ sender: Any) {
+    @IBAction func artSaveButtonAction(_ sender: Any) {
         saveImage()
     }
+    
     func saveImage(){
         let alertController = UIAlertController(title: "保存", message: "このジャケット写真を保存しますか？", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (ok) in
             
-            SPAlert.present(title: "ライブラリに追加しました", preset: .done)
+            SPAlert.present(title: "カメラロールに保存しました", preset: .done)
             PHPhotoLibrary.shared().performChanges {
                 //PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: URL(string: self.passedMusicModel.artworkUrl_!)!)
                 PHAssetChangeRequest.creationRequestForAsset(from: self.artWorkImageView.image!)
             } completionHandler: { (result, error) in
                 if error != nil{
                     print(error.debugDescription)
-                    //アラートだしたい！
                 }
                 else {
                     print("画像を保存しました")

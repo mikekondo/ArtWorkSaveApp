@@ -10,6 +10,7 @@ import SDWebImage
 import Pastel
 class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UITextFieldDelegate,itaCatchMusicDataDelegate {
     
+    @IBOutlet weak var pastelView: PastelView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     //楽曲情報の配列
@@ -23,14 +24,29 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         searchBar.delegate = self
         collectionView.delegate = self
         collectionView.dataSource = self
+        
+        //フォアグラウンド時の処理
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(SearchViewController.viewWillEnterForeground(_:)),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil)
     }
+    
+    //アプリがフォアグラウンド時(ホーム画面からアプリをタップした時でもBackgroundColorをパステルカラーにする
+    @objc func viewWillEnterForeground(_ notification: Notification?) {
+        if (self.isViewLoaded && (self.view.window != nil)) {
+            setBackgroundColor()
+            print("フォアグラウンド")
+        }
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        print("2: viewWillAppear")
         setBackgroundColor()
         //画面遷移から戻ってきた時にViewのトップに移動する
         collectionView.setContentOffset(CGPoint.zero, animated: true)
@@ -127,8 +143,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         collectionView.reloadData()
     }
     func setBackgroundColor(){
-        let pastelView = PastelView(frame: view.bounds)
-        
+        print("setBackgroundColor()")
         // Custom Direction
         pastelView.startPastelPoint = .bottomLeft
         pastelView.endPastelPoint = .topRight
@@ -136,21 +151,25 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         // Custom Duration
         pastelView.animationDuration = 2.0
         
+//        Lightgrray
+//        darkslategray
+//        darkmagenta
+//        turquiose
+//        steelblue
+        pastelView.setColors([UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1.0),
+                              UIColor(red: 47/255, green: 79/255, blue: 79/255, alpha: 1.0),
+                              UIColor(red: 139/255, green: 0/255, blue: 139/255, alpha: 1.0),
+                              UIColor(red: 64/255, green: 224/255, blue: 208/255, alpha: 1.0),
+                              UIColor(red: 70/255, green: 130/255, blue: 180/255, alpha: 1.0)])
         // Custom Color
-//        pastelView.setColors([UIColor(red: 100/255, green: 39/255, blue: 100/255, alpha: 1.0),
-//                              UIColor(red: 80/255, green: 31/255, blue: 50/255, alpha: 1.0),
+//        pastelView.setColors([UIColor(red: 156/255, green: 39/255, blue: 176/255, alpha: 1.0),
+//                              UIColor(red: 255/255, green: 64/255, blue: 129/255, alpha: 1.0),
+//                              UIColor(red: 123/255, green: 31/255, blue: 162/255, alpha: 1.0),
+//                              UIColor(red: 32/255, green: 76/255, blue: 255/255, alpha: 1.0),
+//                              UIColor(red: 32/255, green: 158/255, blue: 255/255, alpha: 1.0),
 //                              UIColor(red: 90/255, green: 120/255, blue: 127/255, alpha: 1.0),
-//                              UIColor(red: 58/255, green: 200/255, blue: 217/255, alpha: 1.0),
-//                              UIColor(red: 58/255, green: 80/255, blue: 25/255, alpha: 1.0)])
-        pastelView.setColors([UIColor(red: 156/255, green: 39/255, blue: 176/255, alpha: 1.0),
-                              UIColor(red: 255/255, green: 64/255, blue: 129/255, alpha: 1.0),
-                              UIColor(red: 123/255, green: 31/255, blue: 162/255, alpha: 1.0),
-                              UIColor(red: 32/255, green: 76/255, blue: 255/255, alpha: 1.0),
-                              UIColor(red: 32/255, green: 158/255, blue: 255/255, alpha: 1.0),
-                              UIColor(red: 90/255, green: 120/255, blue: 127/255, alpha: 1.0),
-                              UIColor(red: 58/255, green: 255/255, blue: 217/255, alpha: 1.0)])
+//                              UIColor(red: 58/255, green: 255/255, blue: 217/255, alpha: 1.0)])
         pastelView.startAnimation()
-        print(pastelView)
         view.insertSubview(pastelView, at: 0)
     }
 }
