@@ -18,7 +18,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     //collectionView関連の設定
     //collection間の間隔
-    let sectionInsets = UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0)
+    let sectionInsets = UIEdgeInsets(top: 4.0, left: 1.0, bottom: 4.0, right: 1.0)
     //列の数
     let itemsPerRow = 3
     
@@ -143,24 +143,21 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         collectionView.reloadData()
     }
     func setBackgroundColor(){
-        print("setBackgroundColor()")
         // Custom Direction
-        pastelView.startPastelPoint = .bottomLeft
-        pastelView.endPastelPoint = .topRight
+        pastelView.startPastelPoint = .bottomRight
+        pastelView.endPastelPoint = .topLeft
+        // 色変化の間隔[s]
+        pastelView.animationDuration = 1.5
         
-        // Custom Duration
-        pastelView.animationDuration = 2.0
-        
-//        Lightgrray
-//        darkslategray
-//        darkmagenta
-//        turquiose
-//        steelblue
-        pastelView.setColors([UIColor(red: 211/255, green: 211/255, blue: 211/255, alpha: 1.0),
+//明るいグレーから黒へ
+//        darkgrey
+//        grey
+//        darkslategrey
+//        black
+        pastelView.setColors([UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 1.0),
+                              UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0),
                               UIColor(red: 47/255, green: 79/255, blue: 79/255, alpha: 1.0),
-                              UIColor(red: 139/255, green: 0/255, blue: 139/255, alpha: 1.0),
-                              UIColor(red: 64/255, green: 224/255, blue: 208/255, alpha: 1.0),
-                              UIColor(red: 70/255, green: 130/255, blue: 180/255, alpha: 1.0)])
+                              UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)])
         // Custom Color
 //        pastelView.setColors([UIColor(red: 156/255, green: 39/255, blue: 176/255, alpha: 1.0),
 //                              UIColor(red: 255/255, green: 64/255, blue: 129/255, alpha: 1.0),

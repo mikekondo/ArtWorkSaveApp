@@ -16,45 +16,40 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate,UINavigationC
     
     var passedMusicModel = MusicModel()
     var artworkURL:URL!
+    
+    //IBOutlet
     @IBOutlet weak var artWorkImageView: UIImageView!
     @IBOutlet weak var artWorkBackGroundImageView: UIImageView!
-    
     @IBOutlet weak var trackNameLabel: UILabel!
     @IBOutlet weak var artistNameLabel: UILabel!
     @IBOutlet weak var miniPlayer: MiniPlayer!
     @IBOutlet weak var artSaveButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //ナビゲーションバーのタイトルをアルバム名に設定する
         navigationController?.delegate=self
+        self.title = "\(passedMusicModel.collectionName_!)"
+        self.navigationController?.navigationBar.titleTextAttributes = [
+               .foregroundColor: UIColor.white // 文字の色
+           ]
         
         //miniPlayerの設定
         miniPlayer.delegate = self
-        
-        
         miniPlayer.tintColor = UIColor.white
         miniPlayer.backgroundColor = UIColor.init(red: 170/255.0, green: 170/255.0, blue: 170/255.0, alpha: 0.5)
-        
         miniPlayer.timeLabelVisible = true
-        
         miniPlayer.timerColor = UIColor.white
-        
         miniPlayer.activeTimerColor = UIColor.white
-        
-        
         miniPlayer.activeTrackColor = UIColor.init(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.7)
-        
         miniPlayer.durationTimeInSec = 0
         
-        let urlPath = passedMusicModel.previewUrl_!
-        
-        let song = AVPlayerItem(asset: AVAsset(url: URL(string: urlPath)!), automaticallyLoadedAssetKeys: ["playable"])
+        //iTunesAPIから受け取った試聴URLをminiPlayerで流せるようにする
+        let previewUrlPath = passedMusicModel.previewUrl_!
+        let song = AVPlayerItem(asset: AVAsset(url: URL(string: previewUrlPath)!), automaticallyLoadedAssetKeys: ["playable"])
         self.miniPlayer.soundTrack = song
         
-        self.title = "\(passedMusicModel.collectionName_!)"
-        self.navigationController?.navigationBar.titleTextAttributes = [
-           // 文字の色
-               .foregroundColor: UIColor.white
-           ]
         artSaveButton.setTitle("ジャケット写真の保存", for: .normal)
         artSaveButton.setTitleColor(UIColor.white, for: .normal)
         artSaveButton.backgroundColor = UIColor.init(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.5)

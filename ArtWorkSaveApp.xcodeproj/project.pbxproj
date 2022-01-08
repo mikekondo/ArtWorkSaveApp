@@ -81,10 +81,6 @@
 				955696E227806CEF0009E8F5 /* Model */,
 				955696E127806CEB0009E8F5 /* View */,
 				955696E027806CE00009E8F5 /* Controller */,
-				955195DA278055CC000EF9E0 /* AppDelegate.swift */,
-				955195DC278055CC000EF9E0 /* SceneDelegate.swift */,
-				955195E3278055CD000EF9E0 /* Assets.xcassets */,
-				955195E5278055CD000EF9E0 /* LaunchScreen.storyboard */,
 				955195E8278055CD000EF9E0 /* Info.plist */,
 			);
 			path = ArtWorkSaveApp;
@@ -93,6 +89,8 @@
 		955696E027806CE00009E8F5 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				955195DA278055CC000EF9E0 /* AppDelegate.swift */,
+				955195DC278055CC000EF9E0 /* SceneDelegate.swift */,
 				95B413692780575B00C6D76E /* MusicDataViewController.swift */,
 				955195DE278055CC000EF9E0 /* SearchViewController.swift */,
 			);
@@ -103,6 +101,8 @@
 			isa = PBXGroup;
 			children = (
 				955195E0278055CC000EF9E0 /* Main.storyboard */,
+				955195E3278055CD000EF9E0 /* Assets.xcassets */,
+				955195E5278055CD000EF9E0 /* LaunchScreen.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -392,11 +392,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7X9S244452;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ArtWorkSaveApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ArtMusic;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "アルバムを使います";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Send pictures from app";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -421,11 +425,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7X9S244452;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ArtWorkSaveApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ArtMusic;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "アルバムを使います";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Send pictures from app";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
