@@ -8,7 +8,8 @@
 import UIKit
 import SDWebImage
 import Pastel
-class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UITextFieldDelegate,itaCatchMusicDataDelegate {
+
+class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UITextFieldDelegate,iTunesAPICatchMusicDataDelegate {
     
     @IBOutlet weak var pastelView: PastelView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -18,7 +19,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     //collectionView関連の設定
     //collection間の間隔
-    let sectionInsets = UIEdgeInsets(top: 4.0, left: 1.0, bottom: 4.0, right: 1.0)
+    let sectionInsets = UIEdgeInsets(top: 4.0, left: 0, bottom: 4.0, right: 0)
     //列の数
     let itemsPerRow = 3
     
@@ -48,8 +49,11 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         super.viewWillAppear(animated)
         print("2: viewWillAppear")
         setBackgroundColor()
+        
         //画面遷移から戻ってきた時にViewのトップに移動する
         collectionView.setContentOffset(CGPoint.zero, animated: true)
+        
+        //ナビゲーションバーを隠す
         self.navigationController?.isNavigationBarHidden = true
         
         //searchBarのバックグラウンドを透過させる
@@ -61,8 +65,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         //searchBarの中のTextFieldの背景色を白にする
         searchBar.searchTextField.backgroundColor = UIColor.white
         
-        //Todo:if文でUserDefalutsの値があればsearchBar.searchTextFieldにその値をいれてmusicAnaticsを回す
         if UserDefaults.standard.object(forKey: "searchWord") != nil{
+            //前回検索してたワードの取り出し
             let searchWord = UserDefaults.standard.object(forKey: "searchWord") as! String
             //キーボードを閉じる
             self.view.endEditing(true)
@@ -71,18 +75,16 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             let musicAnalytics = MusicAnalytics()
             musicAnalytics.delegate = self
             let urlString = "https://itunes.apple.com/search?term=\(searchWord)&country=jp"
-            //こっちだとなぜか検索結果が思わしくない
-            //let urlString = "https://itunes.apple.com/search?term=\(String(describing:searchBar.searchTextField.text!))&entity=song&contry=jp"
-            musicAnalytics.itaExe(itaUrl: urlString)
+            musicAnalytics.iTunesAPIExe(itaUrl: urlString)
         }
     }
     
     //タッチすると呼ばれる
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
         //キーボードを閉じる
         self.view.endEditing(true)
     }
+    
     //searchボタン(TextFieldでいうEnter)を押すと呼ばれる
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         //キーボードを閉じる
@@ -93,13 +95,12 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         let musicAnalytics = MusicAnalytics()
         musicAnalytics.delegate = self
         let urlString = "https://itunes.apple.com/search?term=\(searchBar.searchTextField.text!)&country=jp"
-        //こっちだとなぜか検索結果が思わしくない
-        //let urlString = "https://itunes.apple.com/search?term=\(String(describing:searchBar.searchTextField.text!))&entity=song&contry=jp"
-        musicAnalytics.itaExe(itaUrl: urlString)
+        musicAnalytics.iTunesAPIExe(itaUrl: urlString)
         
-        //Todo:searchBar.searchTextField.text!をアプリ内保存する
+        //search.textの保存
         UserDefaults.standard.set(searchBar.searchTextField.text,forKey: "searchWord")
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let musicCell = collectionView.dequeueReusableCell(withReuseIdentifier: "musicCell", for: indexPath)
         
@@ -112,9 +113,12 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         artworkImageView.sd_setImage(with: URL(string: musicModelArray[indexPath.row].artworkUrl_!), completed: nil)
         return musicCell
     }
+    
+    //collectionの数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return musicModelArray.count
     }
+    
     //セル(item)の大きさを決めている
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
@@ -136,7 +140,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         self.navigationController?.pushViewController(musicDataVC, animated: true)
     }
     //iTunesAPI実行後のデリゲートメソッド
-    func itaCatchMusicData(passedMusicDataArray: [MusicModel]) {
+    func iTunesAPICatchMusicData(passedMusicDataArray: [MusicModel]) {
         //データを空にする
         musicModelArray = []
         musicModelArray = passedMusicDataArray
@@ -144,30 +148,16 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     }
     func setBackgroundColor(){
         // Custom Direction
-        pastelView.startPastelPoint = .bottomRight
-        pastelView.endPastelPoint = .topLeft
+        pastelView.startPastelPoint = .bottomLeft
+        pastelView.endPastelPoint = .topRight
         // 色変化の間隔[s]
-        pastelView.animationDuration = 1.5
+        pastelView.animationDuration = 2.0
         
-//明るいグレーから黒へ
-//        darkgrey
-//        grey
-//        darkslategrey
-//        black
-        pastelView.setColors([UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 1.0),
-                              UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0),
-                              UIColor(red: 47/255, green: 79/255, blue: 79/255, alpha: 1.0),
-                              UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)])
-        // Custom Color
-//        pastelView.setColors([UIColor(red: 156/255, green: 39/255, blue: 176/255, alpha: 1.0),
-//                              UIColor(red: 255/255, green: 64/255, blue: 129/255, alpha: 1.0),
-//                              UIColor(red: 123/255, green: 31/255, blue: 162/255, alpha: 1.0),
-//                              UIColor(red: 32/255, green: 76/255, blue: 255/255, alpha: 1.0),
-//                              UIColor(red: 32/255, green: 158/255, blue: 255/255, alpha: 1.0),
-//                              UIColor(red: 90/255, green: 120/255, blue: 127/255, alpha: 1.0),
-//                              UIColor(red: 58/255, green: 255/255, blue: 217/255, alpha: 1.0)])
+        //黒→グレーのアニメーション
+        pastelView.setColors([UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0),//black
+                              UIColor(red: 47/255, green: 79/255, blue: 79/255, alpha: 1.0),//darkslategrey
+                              UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0)])//grey
         pastelView.startAnimation()
         view.insertSubview(pastelView, at: 0)
     }
 }
-

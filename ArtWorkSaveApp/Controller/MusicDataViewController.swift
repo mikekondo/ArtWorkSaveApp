@@ -71,7 +71,6 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate,UINavigationC
         artistNameLabel.text = passedMusicModel.artistName_
         trackNameLabel.text = passedMusicModel.trackName_
         artworkURL = URL(string: passedMusicModel.artworkUrl_!)
-        
     }
     
     @IBAction func artSaveButtonAction(_ sender: Any) {
@@ -92,10 +91,7 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate,UINavigationC
                 }
                 else {
                     print("画像を保存しました")
-                    //アラートだしたい！
-                    
                 }
-                
             }
         }
         let cancelAction = UIAlertAction(title: "CANCEL", style: .default) { (cancel) in
@@ -106,10 +102,12 @@ class MusicDataViewController: UIViewController,MiniPlayerDelegate,UINavigationC
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
+    
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         miniPlayer.stop()
     }
     
+    //miniPlayerのデリゲートメソッド
     func didPlay(player: MiniPlayer) {
         print("Playing...")
     }

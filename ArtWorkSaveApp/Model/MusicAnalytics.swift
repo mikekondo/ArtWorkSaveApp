@@ -10,8 +10,8 @@ import Alamofire
 import SwiftyJSON
 import PKHUD
 
-protocol itaCatchMusicDataDelegate{
-    func itaCatchMusicData(passedMusicDataArray:[MusicModel])
+protocol iTunesAPICatchMusicDataDelegate{
+    func iTunesAPICatchMusicData(passedMusicDataArray:[MusicModel])
 }
 
 class MusicAnalytics{
@@ -19,10 +19,10 @@ class MusicAnalytics{
     var musicModelArray = [MusicModel]()
     
     //プロトコルの実態化
-    var delegate:itaCatchMusicDataDelegate?
+    var delegate:iTunesAPICatchMusicDataDelegate?
     
     //iTunesAPIの実行
-    func itaExe(itaUrl:String){
+    func iTunesAPIExe(itaUrl:String){
         
         //エンコード
         let encodeUrl:String = itaUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
@@ -42,7 +42,7 @@ class MusicAnalytics{
                     let resultCount = json["results"].count
                     for i in 0..<resultCount{
                         if let artistName = json["results"][i]["artistName"].string,let collectionName = json["results"][i]["collectionName"].string,let trackName = json["results"][i]["trackName"].string,let previewUrl = json["results"][i]["previewUrl"].string,var artworkUrl = json["results"][i]["artworkUrl100"].string{
-                            //アーティスト写真を大きくする処理("100x100bb"のままだと画質が落ちるため)
+                            //ジャケット写真写真を大きくする処理("100x100bb"のままだと画質が落ちるため)
                             if let range = artworkUrl.range(of:"100x100bb"){
                                 artworkUrl.replaceSubrange(range, with: "2000x2000bb")
                             }
@@ -52,7 +52,7 @@ class MusicAnalytics{
                     }//for文ここまで
                     HUD.hide()
                     //プロトコルを用いてコントローラーへmusicModelArrayを渡す
-                    self.delegate?.itaCatchMusicData(passedMusicDataArray: self.musicModelArray)
+                    self.delegate?.iTunesAPICatchMusicData(passedMusicDataArray: self.musicModelArray)
                 }//doここまで
                 catch{
                     return
@@ -63,5 +63,5 @@ class MusicAnalytics{
             }//switchここまで
         }//AF通信ここまで
         
-    }//itaExeここまで
+    }//iTunesAPIExeここまで
 }
