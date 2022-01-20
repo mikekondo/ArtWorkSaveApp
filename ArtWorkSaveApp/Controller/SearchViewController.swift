@@ -25,10 +25,7 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.delegate = self
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
+        setUp()
         //フォアグラウンド時の処理
         NotificationCenter.default.addObserver(
             self,
@@ -47,23 +44,14 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("2: viewWillAppear")
         setBackgroundColor()
-        
+        searchBarSetting()
         //画面遷移から戻ってきた時にViewのトップに移動する
         collectionView.setContentOffset(CGPoint.zero, animated: true)
         
         //ナビゲーションバーを隠す
         self.navigationController?.isNavigationBarHidden = true
         
-        //searchBarのバックグラウンドを透過させる
-        searchBar.backgroundImage = UIImage()
-
-        //searchBarのバックグラウンドカラーを透過させる
-        searchBar.backgroundColor = UIColor.clear
-
-        //searchBarの中のTextFieldの背景色を白にする
-        searchBar.searchTextField.backgroundColor = UIColor.white
         
         if UserDefaults.standard.object(forKey: "searchWord") != nil{
             //前回検索してたワードの取り出し
@@ -71,11 +59,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
             //キーボードを閉じる
             self.view.endEditing(true)
 
-            //iTunesAPIの実行
-            let musicAnalytics = MusicAnalytics()
-            musicAnalytics.delegate = self
-            let urlString = "https://itunes.apple.com/search?term=\(searchWord)&country=jp"
-            musicAnalytics.iTunesAPIExe(itaUrl: urlString)
+            //前回検索してたワードで楽曲の検索
+            searchMusic(searchWord: searchWord)
         }
     }
     
@@ -91,15 +76,12 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         self.view.endEditing(true)
         //viewをトップに持ってくる
         collectionView.setContentOffset(CGPoint.zero, animated: true)
-        //iTunesAPIの実行
-        let musicAnalytics = MusicAnalytics()
-        musicAnalytics.delegate = self
-        let urlString = "https://itunes.apple.com/search?term=\(searchBar.searchTextField.text!)&country=jp"
-        musicAnalytics.iTunesAPIExe(itaUrl: urlString)
-        
+        //楽曲の検索
+        searchMusic(searchWord: searchBar.searchTextField.text!)
         //search.textの保存
         UserDefaults.standard.set(searchBar.searchTextField.text,forKey: "searchWord")
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let musicCell = collectionView.dequeueReusableCell(withReuseIdentifier: "musicCell", for: indexPath)
@@ -146,7 +128,8 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
         musicModelArray = passedMusicDataArray
         collectionView.reloadData()
     }
-    func setBackgroundColor(){
+    
+    private func setBackgroundColor(){
         // Custom Direction
         pastelView.startPastelPoint = .bottomLeft
         pastelView.endPastelPoint = .topRight
@@ -159,5 +142,26 @@ class SearchViewController: UIViewController,UISearchBarDelegate,UICollectionVie
                               UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1.0)])//grey
         pastelView.startAnimation()
         view.insertSubview(pastelView, at: 0)
+    }
+    private func searchBarSetting(){
+        //searchBarのバックグラウンドを透過させる
+        searchBar.backgroundImage = UIImage()
+
+        //searchBarのバックグラウンドカラーを透過させる
+        searchBar.backgroundColor = UIColor.clear
+
+        //searchBarの中のTextFieldの背景色を白にする
+        searchBar.searchTextField.backgroundColor = UIColor.white
+    }
+    private func setUp(){
+        searchBar.delegate = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
+    }
+    private func searchMusic(searchWord: String){
+        let musicAnalytics = MusicAnalytics()
+        musicAnalytics.delegate = self
+        let urlString = "https://itunes.apple.com/search?term=\(searchWord)&country=jp"
+        musicAnalytics.iTunesAPIExe(itaUrl: urlString)
     }
 }
